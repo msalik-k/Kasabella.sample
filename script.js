@@ -1,9 +1,4 @@
-/* =====================================================================
-   Kasabella — motion layer
-   GSAP + ScrollTrigger choreography. Everything is registered inside a
-   single gsap.matchMedia() context so breakpoint changes clean up after
-   themselves, and reduced-motion visitors get a fully static page.
-   ===================================================================== */
+
 (function () {
   "use strict";
 
@@ -11,9 +6,6 @@
   var hasGSAP = typeof window.gsap !== "undefined";
   var hasST = hasGSAP && typeof window.ScrollTrigger !== "undefined";
 
-  /* If GSAP never arrives (blocked CDN, offline), drop the pre-hidden
-     states immediately so the page is readable, then wire the accordion
-     with its CSS fallback. */
   if (!hasGSAP) {
     root.classList.remove("js-anim");
     ready(function () {
@@ -28,11 +20,7 @@
     ScrollTrigger.config({ ignoreMobileResize: true });
   }
 
-  /* -------------------------------------------------------------------
-     Word splitter — wraps each word in a mask so text can rise into
-     view instead of fading. Element children (like the gold "Quality"
-     span) are kept whole so the gradient clip is never broken.
-  ------------------------------------------------------------------- */
+ 
   function makeWord(inner) {
     var mask = document.createElement("span");
     mask.className = "a-word";
@@ -74,12 +62,7 @@
     return el.querySelectorAll(".a-word-in");
   }
 
-  /* -------------------------------------------------------------------
-     HERO
-     One orchestrated entrance: the headline rises word by word, copy and
-     buttons follow, then the photo stack settles forward out of depth
-     with its two backing cards fanning into place.
-  ------------------------------------------------------------------- */
+
   function heroEntrance(deep) {
     var heading = document.querySelector("[data-hero-line]");
     var fadeEls = document.querySelectorAll("[data-hero-fade]");
@@ -250,8 +233,12 @@
     };
   }
 
-  /* Scroll parallax: copy drifts up and dims, the photo pushes deeper —
-     the hero hands the page over instead of just scrolling away. */
+  /* Scroll parallax: copy drifts up, the photo pushes deeper — the hero
+     hands the page over instead of just scrolling away.
+     NOTE: the copy used to also tween to opacity 0.25 here. That tween sits
+     on .hero-copy (the parent of the <h1>), so it made the hero heading
+     fade as soon as the page scrolled. Opacity is intentionally left alone
+     so the heading stays at 100%. */
   function heroScroll(deep) {
     if (!hasST) return;
     var hero = document.querySelector(".hero");
@@ -269,7 +256,7 @@
       },
     });
 
-    if (copy) tl.to(copy, { y: deep ? -70 : -34, opacity: 0.25, ease: "none" }, 0);
+    if (copy) tl.to(copy, { y: deep ? -70 : -34, ease: "none" }, 0);
     if (visual) tl.to(visual, { y: deep ? -26 : -14, ease: "none" }, 0);
     if (img) tl.fromTo(img, { yPercent: -3, scale: 1.06 }, { yPercent: 5, scale: 1.02, ease: "none" }, 0);
   }
@@ -424,6 +411,21 @@
           ease: "power3.out",
           stagger: 0.07,
           scrollTrigger: { trigger: faqList, start: "top 85%", once: true },
+        }
+      );
+    }
+
+    var booking = document.querySelector("[data-reveal-form]");
+    if (booking) {
+      gsap.fromTo(
+        booking,
+        { opacity: 0, y: 22 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: { trigger: booking, start: "top 88%", once: true },
         }
       );
     }
@@ -668,4 +670,226 @@
       if (window.console && console.error) console.error("Animation setup failed:", err);
     }
   });
+})();
+
+
+/* =====================================================================
+   Kasabella — appointment booking form → WhatsApp
+   Self-contained on purpose: it does not depend on GSAP, so the form
+   keeps working even if the animation libraries fail to load.
+   ===================================================================== */
+(function () {
+  "use strict";
+
+  /* Salon owner's WhatsApp number — international format, digits only
+     (no "+", spaces or dashes). This is the same number already used by
+     every "Book on WhatsApp" button on the page. Change it here only. */
+  var WHATSAPP_NUMBER = "923337874397";
+  var SALON_NAME = "Kasabella Hair Salon & SPA";
+
+  function init() {
+    var form = document.getElementById("booking-form");
+    if (!form) return;
+
+    var status = document.getElementById("booking-status");
+    var notesCount = document.getElementById("bk-notes-count");
+    var keys = ["name", "phone", "service", "date", "time", "notes"];
+    var fields = {};
+
+    keys.forEach(function (key) {
+      var input = document.getElementById("bk-" + key);
+      fields[key] = {
+        input: input,
+        wrap: input.closest(".field"),
+        error: document.getElementById("bk-" + key + "-error"), // notes has none
+      };
+    });
+
+    /* ---------- date helpers (local time, never UTC) ---------- */
+    function pad(n) {
+      return n < 10 ? "0" + n : "" + n;
+    }
+    function todayISO() {
+      var d = new Date();
+      return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+    }
+    function formatDate(iso) {
+      var p = iso.split("-");
+      var d = new Date(+p[0], +p[1] - 1, +p[2]);
+      try {
+        return d.toLocaleDateString("en-GB", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+      } catch (err) {
+        return iso;
+      }
+    }
+
+    // Past dates can't be picked in the calendar; validation re-checks on submit.
+    fields.date.input.setAttribute("min", todayISO());
+
+    /* ---------- validation ---------- */
+    var validators = {
+      name: function (v) {
+        return v.length < 2 ? "Please enter your name." : "";
+      },
+      phone: function (v) {
+        if (!v) return "Please enter your phone number.";
+        var digits = v.replace(/\D/g, "");
+        if (!/^\+?[\d\s\-()]+$/.test(v) || digits.length < 10 || digits.length > 15) {
+          return "Please enter a valid phone number, e.g. 0300 1234567.";
+        }
+        return "";
+      },
+      service: function (v) {
+        return v ? "" : "Please choose a service.";
+      },
+      date: function (v) {
+        if (!v) return "Please choose your preferred date.";
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return "Please enter a valid date.";
+        if (v < todayISO()) return "Please choose today or a later date.";
+        return "";
+      },
+      time: function (v) {
+        return v ? "" : "Please choose your preferred time.";
+      },
+    };
+
+    function setError(key, message) {
+      var f = fields[key];
+      f.wrap.classList.add("has-error");
+      f.input.setAttribute("aria-invalid", "true");
+      if (f.error) {
+        f.error.textContent = message;
+        f.error.hidden = false;
+      }
+    }
+
+    function clearError(key) {
+      var f = fields[key];
+      f.wrap.classList.remove("has-error");
+      f.input.removeAttribute("aria-invalid");
+      if (f.error) {
+        f.error.textContent = "";
+        f.error.hidden = true;
+      }
+    }
+
+    // Errors disappear as soon as the customer corrects the field.
+    keys.forEach(function (key) {
+      var clear = function () {
+        clearError(key);
+      };
+      fields[key].input.addEventListener("input", clear);
+      fields[key].input.addEventListener("change", clear);
+    });
+
+    if (notesCount) {
+      var max = fields.notes.input.getAttribute("maxlength") || "600";
+      var updateCount = function () {
+        notesCount.textContent = fields.notes.input.value.length + " / " + max;
+      };
+      fields.notes.input.addEventListener("input", updateCount);
+      updateCount();
+    }
+
+    /* ---------- WhatsApp message ---------- */
+    function buildMessage(v) {
+      var notes = v.notes || "None";
+      var notesLine =
+        notes.indexOf("\n") > -1
+          ? "*Additional Notes:*\n" + notes
+          : "*Additional Notes:* " + notes;
+
+      return [
+        "*New Appointment Request*",
+        SALON_NAME,
+        "",
+        "*Customer Name:* " + v.name,
+        "*Phone Number:* " + v.phone,
+        "*Service:* " + v.service,
+        "*Preferred Date:* " + formatDate(v.date),
+        "*Preferred Time:* " + v.time,
+        notesLine,
+        "",
+        "Sent from the Kasabella website booking form.",
+      ].join("\n");
+    }
+
+    function buildUrl(v) {
+      return (
+        "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(buildMessage(v))
+      );
+    }
+
+    /* A programmatic link click made inside the submit handler counts as a
+       user gesture, so mobile browsers and popup blockers allow it. */
+    function openWhatsApp(url) {
+      var a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function showStatus(url) {
+      status.textContent = "";
+      if (!url) return;
+      status.appendChild(
+        document.createTextNode(
+          "Your request is ready in WhatsApp. Press Send there to confirm it. Didn\u2019t open? "
+        )
+      );
+      var link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = "Tap here to open it again";
+      status.appendChild(link);
+      status.appendChild(document.createTextNode("."));
+    }
+
+    /* ---------- submit ---------- */
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var values = {};
+      var firstInvalid = null;
+
+      Object.keys(validators).forEach(function (key) {
+        var v = fields[key].input.value.trim();
+        values[key] = v;
+        var message = validators[key](v);
+        if (message) {
+          setError(key, message);
+          if (!firstInvalid) firstInvalid = fields[key].input;
+        } else {
+          clearError(key);
+        }
+      });
+      values.notes = fields.notes.input.value.trim();
+
+      if (firstInvalid) {
+        showStatus(null);
+        firstInvalid.focus();
+        return;
+      }
+
+      var url = buildUrl(values);
+      openWhatsApp(url);
+      showStatus(url);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
 })();

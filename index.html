@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kasabella Hair Salon &amp; SPA — Latifabad, Hyderabad</title>
+<link rel="icon" type="image/png" href="favicon.png">
 <meta name="description" content="Kasabella Hair Salon & SPA in Latifabad, Hyderabad — hair services, facials, skin treatments and manicure/pedicure in one calm, skilled salon.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -208,6 +209,123 @@
   </section>
 </div>
 
+<div class="wrap">
+  <section id="booking">
+    <h2 class="gold-text section-heading" data-reveal-heading>Book an Appointment</h2>
+
+    <form class="booking-card" id="booking-form" data-reveal-form novalidate>
+      <p class="booking-lead">Tell us what you&rsquo;d like and when. Your request opens in WhatsApp, and we&rsquo;ll confirm your slot there.</p>
+
+      <div class="booking-grid">
+        <div class="field">
+          <label for="bk-name">Name <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" type="text" id="bk-name" name="name" autocomplete="name" placeholder="Your full name" required aria-required="true" aria-describedby="bk-name-error">
+          <p class="field-error" id="bk-name-error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="bk-phone">Phone Number <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" type="tel" id="bk-phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="e.g. 0300 1234567" required aria-required="true" aria-describedby="bk-phone-error">
+          <p class="field-error" id="bk-phone-error" hidden></p>
+        </div>
+
+        <div class="field field-full">
+          <label for="bk-service">Service <span class="req" aria-hidden="true">*</span></label>
+          <select class="input" id="bk-service" name="service" required aria-required="true" aria-describedby="bk-service-error">
+            <option value="" disabled selected>Choose a service</option>
+            <optgroup label="Hair Services">
+              <option value="Hair Cut — Rs. 400">Hair Cut — Rs. 400</option>
+              <option value="Styling — Rs. 200">Styling — Rs. 200</option>
+              <option value="Hair Shine — Rs. 800 – 3500">Hair Shine — Rs. 800 – 3500</option>
+              <option value="Shave — Rs. 250">Shave — Rs. 250</option>
+              <option value="Head Massage — Rs. 500">Head Massage — Rs. 500</option>
+            </optgroup>
+            <optgroup label="Skin Cleansing">
+              <option value="Face Polish — Rs. 500">Face Polish — Rs. 500</option>
+              <option value="Cleansing — Rs. 500">Cleansing — Rs. 500</option>
+              <option value="Face Polish + Scrub — Rs. 800">Face Polish + Scrub — Rs. 800</option>
+              <option value="Face Mask Black — Rs. 300">Face Mask Black — Rs. 300</option>
+            </optgroup>
+            <optgroup label="Hair Protein">
+              <option value="Desi Oil + Egg + Vitamin E — Rs. 1500">Desi Oil + Egg + Vitamin E — Rs. 1500</option>
+              <option value="Hair Full Protein — Rs. 3000">Hair Full Protein — Rs. 3000</option>
+              <option value="Body Shop Protein — Rs. 5000">Body Shop Protein — Rs. 5000</option>
+            </optgroup>
+            <optgroup label="Facials">
+              <option value="Dermacos Facial (Full) — Rs. 3000">Dermacos Facial (Full) — Rs. 3000</option>
+              <option value="Dermacos Facial (Half) — Rs. 1800">Dermacos Facial (Half) — Rs. 1800</option>
+              <option value="Johnson Facial (Full) — Rs. 3500">Johnson Facial (Full) — Rs. 3500</option>
+              <option value="Johnson Facial (Half) — Rs. 2000">Johnson Facial (Half) — Rs. 2000</option>
+              <option value="Janssen Facial — Rs. 10000">Janssen Facial — Rs. 10000</option>
+              <option value="Body Shop Facial — Rs. 10000">Body Shop Facial — Rs. 10000</option>
+              <option value="Geniot Facial (Full) — Rs. 10000">Geniot Facial (Full) — Rs. 10000</option>
+              <option value="Geniot Facial (Half) — Rs. 6000">Geniot Facial (Half) — Rs. 6000</option>
+              <option value="Hydra Facial — Rs. 6000">Hydra Facial — Rs. 6000</option>
+            </optgroup>
+            <optgroup label="Manicure &amp; Pedicure">
+              <option value="Manicure — Rs. 1500">Manicure — Rs. 1500</option>
+              <option value="Pedicure — Rs. 1500">Pedicure — Rs. 1500</option>
+              <option value="Mani / Pedi — Rs. 2500">Mani / Pedi — Rs. 2500</option>
+              <option value="Mani / Pedi Body Shop — Rs. 5000">Mani / Pedi Body Shop — Rs. 5000</option>
+            </optgroup>
+          </select>
+          <p class="field-error" id="bk-service-error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="bk-date">Preferred Date <span class="req" aria-hidden="true">*</span></label>
+          <input class="input" type="date" id="bk-date" name="date" required aria-required="true" aria-describedby="bk-date-error">
+          <p class="field-error" id="bk-date-error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label for="bk-time">Preferred Time <span class="req" aria-hidden="true">*</span></label>
+          <select class="input" id="bk-time" name="time" required aria-required="true" aria-describedby="bk-time-hint bk-time-error">
+            <option value="" disabled selected>Choose a time</option>
+            <option value="2:00 PM">2:00 PM</option>
+            <option value="2:30 PM">2:30 PM</option>
+            <option value="3:00 PM">3:00 PM</option>
+            <option value="3:30 PM">3:30 PM</option>
+            <option value="4:00 PM">4:00 PM</option>
+            <option value="4:30 PM">4:30 PM</option>
+            <option value="5:00 PM">5:00 PM</option>
+            <option value="5:30 PM">5:30 PM</option>
+            <option value="6:00 PM">6:00 PM</option>
+            <option value="6:30 PM">6:30 PM</option>
+            <option value="7:00 PM">7:00 PM</option>
+            <option value="7:30 PM">7:30 PM</option>
+            <option value="8:00 PM">8:00 PM</option>
+            <option value="8:30 PM">8:30 PM</option>
+            <option value="9:00 PM">9:00 PM</option>
+            <option value="9:30 PM">9:30 PM</option>
+            <option value="10:00 PM">10:00 PM</option>
+            <option value="10:30 PM">10:30 PM</option>
+            <option value="11:00 PM">11:00 PM</option>
+            <option value="11:30 PM">11:30 PM</option>
+            <option value="12:00 AM">12:00 AM</option>
+            <option value="12:30 AM">12:30 AM</option>
+            <option value="1:00 AM">1:00 AM</option>
+            <option value="1:30 AM">1:30 AM</option>
+          </select>
+          <p class="field-hint" id="bk-time-hint">We&rsquo;re open daily, 2:00 PM &ndash; 2:00 AM.</p>
+          <p class="field-error" id="bk-time-error" hidden></p>
+        </div>
+
+        <div class="field field-full">
+          <label for="bk-notes">Additional Notes <span class="opt">(optional)</span></label>
+          <textarea class="input" id="bk-notes" name="notes" rows="4" maxlength="600" placeholder="Anything we should know? Need more than one service? Tell us here."></textarea>
+          <p class="field-count" id="bk-notes-count" aria-hidden="true">0 / 600</p>
+        </div>
+      </div>
+
+      <div class="booking-actions">
+        <button class="btn btn-primary" type="submit">Book Appointment</button>
+        <p class="booking-status" id="booking-status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </section>
+</div>
+
 <section class="visit" id="visit">
   <div class="wrap">
     <h2 class="gold-text section-heading" data-reveal-heading>Visit Kasabella</h2>
@@ -228,7 +346,7 @@
   <svg viewBox="0 0 32 32" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M16.01 2.667c-7.364 0-13.344 5.98-13.344 13.344 0 2.354.615 4.65 1.782 6.671L2.667 29.333l6.803-1.75a13.28 13.28 0 0 0 6.54 1.667h.006c7.364 0 13.344-5.98 13.344-13.344 0-3.565-1.389-6.917-3.911-9.44a13.26 13.26 0 0 0-9.439-3.799zm0 24.42h-.005a11.08 11.08 0 0 1-5.65-1.549l-.405-.24-4.036 1.038 1.078-3.934-.264-.404a11.06 11.06 0 0 1-1.696-5.887c0-6.128 4.987-11.115 11.12-11.115a11.05 11.05 0 0 1 7.865 3.264 11.05 11.05 0 0 1 3.253 7.87c-.003 6.128-4.99 10.957-11.26 10.957zm6.1-8.336c-.334-.167-1.978-.976-2.285-1.087-.307-.111-.53-.167-.752.167-.223.333-.865 1.087-1.06 1.31-.195.223-.39.25-.724.084-.334-.167-1.408-.519-2.682-1.654-.992-.885-1.663-1.978-1.858-2.312-.195-.334-.02-.514.147-.68.15-.15.334-.39.5-.585.167-.195.223-.334.334-.557.112-.223.056-.418-.028-.585-.084-.167-.752-1.813-1.03-2.483-.271-.652-.547-.564-.752-.574l-.641-.011c-.223 0-.585.084-.892.418-.307.334-1.17 1.144-1.17 2.79 0 1.645 1.198 3.235 1.365 3.457.167.223 2.357 3.598 5.71 5.046.798.344 1.42.55 1.905.704.8.254 1.53.218 2.106.132.643-.096 1.978-.808 2.257-1.588.279-.78.279-1.449.195-1.588-.084-.14-.307-.223-.641-.39z"/></svg>
 </a>
 
-<footer> Kasabella Hair Salon Sample By Sk Experts &amp; SPA.</footer>
+<footer> Kasabella Hair Salon By Msk Digital&amp; SPA.</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
