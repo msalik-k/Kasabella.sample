@@ -32,6 +32,7 @@
 @font-face{
   font-family: font1;
   src: url(IBMPlexSerif-SemiBold.ttf);
+  
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -49,11 +50,19 @@ body{
   overflow-x:hidden;
   max-width:100%;
   -webkit-font-smoothing:antialiased;
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+input,
+textarea{
+  -webkit-user-select:text;
+  user-select:text;
 }
 img{max-width:100%;height:auto;}
 h1,h2{font-family:'Cormorant Garamond',serif;font-weight:700;letter-spacing:0.2px;}
 a{color:inherit;text-decoration:none;}
-img{width:100%;display:block;object-fit:cover;}
+img{width:100%;display:block;object-fit:cover;-webkit-user-drag:none;}
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
 
 
@@ -301,6 +310,7 @@ h2{font-size:46px;margin-bottom:8px; font-family: "font1";}
   text-align:left;
   padding:20px 0;
   font-family:"font1";
+  font-weight: 300;
   font-size:17px;
   color:var(--white);
   font-weight:400;
@@ -389,7 +399,6 @@ h2{font-size:46px;margin-bottom:8px; font-family: "font1";}
   scroll-margin-top:110px; /* keeps a focused field clear of the sticky nav */
   transition:border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out), background-color 0.3s var(--ease-out);
 }
-.input::placeholder{color:rgba(201,198,192,0.55);}
 .input:hover{border-color:rgba(201,163,78,0.42);}
 .input:focus{
   outline:none;
@@ -413,7 +422,6 @@ select.input{
   background-repeat:no-repeat;
   background-position:right 16px center;
 }
-select.input:required:invalid{color:rgba(201,198,192,0.55);}
 select.input option{color:var(--white);background:var(--black-2);}
 select.input option[disabled]{color:var(--muted);}
 select.input optgroup{color:var(--gold);font-style:normal;background:var(--black-2);}
@@ -497,14 +505,7 @@ input[type="date"].input::-webkit-calendar-picker-indicator{cursor:pointer;opaci
 footer{padding:28px 0 100px;text-align:center;font-size:12px;color:#6b6863;}
 
 
-/* ================================================================
-   ANIMATION LAYER
-   Every rule below is scoped to .js-anim, which is only added when
-   JavaScript runs AND the visitor has not asked for reduced motion.
-   Without it the page renders fully visible and static.
-   ================================================================ */
 
-/* Word masks produced by the splitter in script.js */
 .a-word{
   display:inline-block;
   overflow:hidden;
@@ -517,7 +518,6 @@ footer{padding:28px 0 100px;text-align:center;font-size:12px;color:#6b6863;}
   will-change:transform;
 }
 
-/* Pre-hidden states — prevents any flash before GSAP takes over */
 .js-anim [data-hero-fade],
 .js-anim [data-reveal-heading],
 .js-anim [data-reveal-sub],
@@ -530,9 +530,6 @@ footer{padding:28px 0 100px;text-align:center;font-size:12px;color:#6b6863;}
 }
 .js-anim [data-hero-stack]{opacity:0;}
 .js-anim [data-hero-layer]{opacity:0;}
-/* .js-anim .a-word-in{transform:translateY(110%);} */
-
-/* Heading underline draws in when its section enters */
 .js-anim .section-heading::after{
   transform:scaleX(0);
   transform-origin:left center;
@@ -541,11 +538,8 @@ footer{padding:28px 0 100px;text-align:center;font-size:12px;color:#6b6863;}
 .js-anim .section-heading.is-revealed::after{
   transform:scaleX(1);
 }
-
-/* Gallery frames are clipped by GSAP; keep the frame itself steady */
 .js-anim .gallery-item{will-change:clip-path;}
 
-/* Safety net: if something goes wrong, nothing stays invisible forever */
 .js-anim.anim-failed [data-hero-fade],
 .js-anim.anim-failed [data-reveal-heading],
 .js-anim.anim-failed [data-reveal-sub],
@@ -600,8 +594,8 @@ footer{padding:28px 0 100px;text-align:center;font-size:12px;color:#6b6863;}
   h2{font-size:27px;}
   .services-block h3{font-size:18px;}
   .btn{padding:12px 20px;font-size:13px;}
-  .cta-row{gap:10px;}
-  .cta-row .btn{flex:1;text-align:center;}
+  .cta-row{flex-direction:column;gap:10px;}
+  .cta-row .btn{text-align:center;}
   .gallery{grid-template-columns:repeat(2,1fr);gap:10px;}
   .detail-row{flex-direction:column;gap:2px;}
   .detail-row .label{width:auto;}
