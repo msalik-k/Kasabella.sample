@@ -72,8 +72,7 @@
 
     var tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-    // Idle drift starts once the entrance has settled. Created here (not in
-    // an onComplete) so gsap.matchMedia owns it and can revert it.
+   
     if (deep && stack) heroFloat(stack);
 
     if (words.length) {
@@ -118,7 +117,7 @@
     }
 
     if (layers.length) {
-      // Baseline resting offsets, then fan out from behind the photo.
+    
       var rest = deep
         ? [
             { x: 12, y: 14, rotation: -3 },
@@ -147,7 +146,7 @@
       });
     }
 
-    // The primary CTA catches its own light once the hero has landed.
+   
     var primary = document.querySelector(".hero .btn-primary");
     if (primary) {
       tl.call(function () {
@@ -161,7 +160,6 @@
     return tl;
   }
 
-  /* Slow idle drift — the stack breathes rather than sits. Desktop only. */
   function heroFloat(stack) {
     gsap.to(stack, {
       y: -12,
@@ -173,8 +171,6 @@
     });
   }
 
-  /* Mouse-follow perspective tilt. The tilt lives on its own wrapper so it
-     never fights the entrance, float or scroll parallax transforms. */
   function heroTilt() {
     var stage = document.querySelector("[data-hero-visual]");
     var tilt = document.querySelector("[data-hero-tilt]");
@@ -233,12 +229,6 @@
     };
   }
 
-  /* Scroll parallax: copy drifts up, the photo pushes deeper — the hero
-     hands the page over instead of just scrolling away.
-     NOTE: the copy used to also tween to opacity 0.25 here. That tween sits
-     on .hero-copy (the parent of the <h1>), so it made the hero heading
-     fade as soon as the page scrolled. Opacity is intentionally left alone
-     so the heading stays at 100%. */
   function heroScroll(deep) {
     if (!hasST) return;
     var hero = document.querySelector(".hero");
@@ -261,16 +251,11 @@
     if (img) tl.fromTo(img, { yPercent: -3, scale: 1.06 }, { yPercent: 5, scale: 1.02, ease: "none" }, 0);
   }
 
-  /* -------------------------------------------------------------------
-     SECTION HEADINGS — words rise, then the gold rule draws itself.
-  ------------------------------------------------------------------- */
   function headingReveals() {
     if (!hasST) return;
     var headings = document.querySelectorAll("[data-reveal-heading]");
 
-    /* These headings carry the gold gradient via background-clip:text, so
-       they are revealed as a whole with a soft upward wipe. Splitting them
-       into inline-block word masks would break the gradient clip. */
+
     Array.prototype.forEach.call(headings, function (heading) {
       gsap.fromTo(
         heading,
@@ -293,10 +278,6 @@
     });
   }
 
-  /* -------------------------------------------------------------------
-     SERVICES — each block reveals as a unit: the category name first,
-     then its price rows cascading down the list.
-  ------------------------------------------------------------------- */
   function serviceReveals(deep) {
     if (!hasST) return;
     var blocks = document.querySelectorAll(".services-block");
@@ -327,11 +308,6 @@
       }
     });
   }
-
-  /* -------------------------------------------------------------------
-     GALLERY — frames wipe open while the photo inside settles from a
-     slight over-scale, then drifts on scroll for depth.
-  ------------------------------------------------------------------- */
   function galleryReveals(deep) {
     if (!hasST) return;
     var items = document.querySelectorAll("[data-reveal-img]");
@@ -373,7 +349,6 @@
 
     if (!deep) return;
 
-    // Gentle vertical drift, opposite directions per column for rhythm.
     Array.prototype.forEach.call(medias, function (media, i) {
       gsap.fromTo(
         media,
@@ -392,10 +367,7 @@
     });
   }
 
-  /* -------------------------------------------------------------------
-     FAQ + VISIT — stacked rows reveal in sequence; the closing CTA gets
-     a small confident scale-in and one pass of light.
-  ------------------------------------------------------------------- */
+ 
   function panelReveals() {
     if (!hasST) return;
 
@@ -469,7 +441,6 @@
     }
   }
 
-  /* Floating WhatsApp button arrives after the hero, not during it. */
   function floatingCta() {
     var float = document.querySelector("[data-float-cta]");
     if (!float) return;
@@ -480,10 +451,6 @@
     );
   }
 
-  /* -------------------------------------------------------------------
-     STICKY NAV — condenses once the hero starts leaving. Class toggle
-     only, so the browser handles the transition cheaply.
-  ------------------------------------------------------------------- */
   function stickyNav() {
     var nav = document.querySelector("[data-nav]");
     if (!nav) return;
@@ -507,10 +474,6 @@
     update();
   }
 
-  /* -------------------------------------------------------------------
-     FAQ ACCORDION — single-open, keyboard accessible, aria-expanded kept
-     in sync. Animates height with GSAP, falls back to a CSS transition.
-  ------------------------------------------------------------------- */
   function closeFaqItem(item, animate) {
     var answer = item.querySelector(".faq-answer");
     var button = item.querySelector(".faq-question");
@@ -583,10 +546,6 @@
     });
   }
 
-  /* -------------------------------------------------------------------
-     SETUP — one entry point. gsap.matchMedia() decides how rich the
-     choreography gets and reverts everything on breakpoint change.
-  ------------------------------------------------------------------- */
   function setupAnimations() {
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -594,7 +553,7 @@
     faqAccordion(!reduced);
 
     if (reduced) {
-      // Nothing is hidden in this mode, so there is nothing to reveal.
+  
       root.classList.remove("js-anim");
       return;
     }
@@ -613,13 +572,11 @@
         var c = context.conditions;
 
         if (c.reduce) {
-          root.classList.add("anim-failed"); // shows everything instantly
+          root.classList.add("anim-failed"); 
           return;
         }
         root.classList.remove("anim-failed");
 
-        // "deep" = the full 3D treatment. Mobile keeps the same language
-        // with lighter transforms and no continuous scrub work.
         var deep = c.desktop;
 
         heroEntrance(deep);
@@ -639,8 +596,6 @@
       }
     );
 
-    // Web fonts change text metrics; recalculate trigger positions once
-    // they land so nothing reveals early or late.
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(function () {
         refreshST();
@@ -649,10 +604,7 @@
     window.addEventListener("load", refreshST);
   }
 
-  /* -------------------------------------------------------------------
-     INIT — the script tag sits at the end of <body>, so the DOM may
-     already be parsed. Handle both cases exactly once.
-  ------------------------------------------------------------------- */
+
   function ready(fn) {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", fn, { once: true });
@@ -665,7 +617,7 @@
     try {
       setupAnimations();
     } catch (err) {
-      // Never let a motion bug hide the salon's content.
+      
       root.classList.add("anim-failed");
       if (window.console && console.error) console.error("Animation setup failed:", err);
     }
@@ -673,17 +625,10 @@
 })();
 
 
-/* =====================================================================
-   Kasabella — appointment booking form → WhatsApp
-   Self-contained on purpose: it does not depend on GSAP, so the form
-   keeps working even if the animation libraries fail to load.
-   ===================================================================== */
+
 (function () {
   "use strict";
 
-  /* Salon owner's WhatsApp number — international format, digits only
-     (no "+", spaces or dashes). This is the same number already used by
-     every "Book on WhatsApp" button on the page. Change it here only. */
   var WHATSAPP_NUMBER = "923337874397";
   var SALON_NAME = "Kasabella Hair Salon & SPA";
 
@@ -705,7 +650,6 @@
       };
     });
 
-    /* ---------- date helpers (local time, never UTC) ---------- */
     function pad(n) {
       return n < 10 ? "0" + n : "" + n;
     }
@@ -728,10 +672,8 @@
       }
     }
 
-    // Past dates can't be picked in the calendar; validation re-checks on submit.
     fields.date.input.setAttribute("min", todayISO());
 
-    /* ---------- validation ---------- */
     var validators = {
       name: function (v) {
         return v.length < 2 ? "Please enter your name." : "";
@@ -778,7 +720,6 @@
       }
     }
 
-    // Errors disappear as soon as the customer corrects the field.
     keys.forEach(function (key) {
       var clear = function () {
         clearError(key);
@@ -796,7 +737,6 @@
       updateCount();
     }
 
-    /* ---------- WhatsApp message ---------- */
     function buildMessage(v) {
       var notes = v.notes || "None";
       var notesLine =
@@ -825,8 +765,6 @@
       );
     }
 
-    /* A programmatic link click made inside the submit handler counts as a
-       user gesture, so mobile browsers and popup blockers allow it. */
     function openWhatsApp(url) {
       var a = document.createElement("a");
       a.href = url;
